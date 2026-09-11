@@ -34,7 +34,7 @@ jobs:
         snap: ${{ fromJSON(needs.discover-snaps.outputs.snaps) }}
     uses: canonical/data-platform-workflows/.github/workflows/release_snap_edge.yaml@v49.0.2
     with:
-      track: 8
+      track: 1
       path-to-snap-project-directory: ${{ matrix.snap.path }}
       artifact-prefix: packed-snap-${{ matrix.snap.name }}
     secrets:

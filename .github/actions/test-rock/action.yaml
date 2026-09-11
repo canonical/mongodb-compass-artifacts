@@ -54,7 +54,7 @@ runs:
 
     - name: Upload spread diagnostics
       if: ${{ success() || failure() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: spread-diagnostics-${{ inputs.rock-name }}-${{ inputs.runner }}
         path: ${{ inputs.rock-path }}/spread-logs/**

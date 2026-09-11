@@ -12,7 +12,7 @@ sudo lxd init --auto
 
 ```bash
 git clone https://github.com/canonical/mongodb-compass-artifacts.git
-cd mongodb-artifacts/compass
+cd mongodb-compass-artifacts/compass
 ```
 
 ## Pack and install

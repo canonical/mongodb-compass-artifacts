@@ -9,7 +9,7 @@ set -euo pipefail
 if ! yq \
     '.parts[] | select(has("stage-snaps")) | .["stage-snaps"][] | select(test("^" + env.ROCK_NAME + "/1/edge$"))' \
     "${ROCKCRAFT_FILE}" | grep -q .; then
-  echo "No ${ROCK_NAME}/8/edge stage snap channel found in ${ROCKCRAFT_FILE}"
+  echo "No ${ROCK_NAME}/1/edge stage snap channel found in ${ROCKCRAFT_FILE}"
   exit 1
 fi
 

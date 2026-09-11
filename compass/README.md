@@ -15,7 +15,7 @@ The snap can be installed directly from the Snap Store.
 or:
 
 ```bash
-sudo snap install mongodb-compass --channel=latest/edge
+sudo snap install mongodb-compass --channel=1/edge
 ```
 
 You can run it with
