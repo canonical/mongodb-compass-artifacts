@@ -16,6 +16,8 @@ or:
 
 ```bash
 sudo snap install mongodb-compass --channel=1/edge
+sudo snap connect mongodb-compass:password-manager-service
+sudo snap connect mongodb-compass:system-observe
 ```
 
 You can run it with

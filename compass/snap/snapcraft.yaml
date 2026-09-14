@@ -91,7 +91,9 @@ parts:
       - libxcb1
       - libxcb-shm0
     override-build: |
+      # Bypass CSFLE download, we will get it from the archive
       echo "process.exit(0)" > packages/compass/scripts/download-csfle.js
+      # Bypass fonts downloads, we're using a free font instead of the licensed one.
       echo "process.exit(0)" > packages/compass/scripts/download-fonts.js
 
       mkdir -p ${CSFLE_LIB_PATH}
