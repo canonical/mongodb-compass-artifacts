@@ -23,4 +23,4 @@ if [ -n "$WAYLAND_DISPLAY" ] && [ -z "$DISABLE_WAYLAND" ]; then
   WAYLAND_OPTS="--enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer,UseOzonePlatform --ozone-platform-hint=auto"
 fi
 
-exec "${SNAP}/usr/bin/mongodb-compass" --ignore-additional-command-line-flags --no-sandbox --disable-seccomp-filter-sandbox $WAYLAND_OPTS "$@"
+exec "${SNAP}/usr/bin/mongodb-compass" --ignore-additional-command-line-flags --no-sandbox --disable-gpu --disable-seccomp-filter-sandbox $WAYLAND_OPTS "$@"
