@@ -47,6 +47,7 @@ apps:
       - x11
       - opengl
       - password-manager-service
+      - home
       - gsettings
 parts:
   wrapper:
@@ -116,12 +117,9 @@ parts:
         ${CRAFT_PART_INSTALL}/usr/share/applications/mongodb-compass.desktop
 
       craftctl default
-    organize:
-      usr/share/doc/mongodb-compass/copyright: licenses/LICENSE-mongodb-compass 
     prime:
       - usr/*
       - -usr/lib/mongodb-compass/chrome-sandbox
-      - licenses/LICENSE-mongodb-compass
     override-prime: |
       craftctl default
       # Staged schemas ship uncompiled; GTK needs the compiled cache.
@@ -144,11 +142,9 @@ parts:
     prime:
       - usr/bin/zenity
       - usr/lib/*/libadwaita-1.so.0
-  snap-license:
+  licenses:
     plugin: dump
     source: .
     source-type: local
     stage:
-      - licenses/LICENSE-snap
-    organize:
-      LICENSE: licenses/LICENSE-snap
+      - licenses/*

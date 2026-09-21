@@ -1,45 +1,62 @@
-# mongodb-compass-artifacts
+# MongoDB Compass Snap
 
-This repository contains MongoDB Compass packaging artifacts used by Canonical.
+[![.github/workflows/publish.yaml](https://github.com/canonical/mongodb-compass-artifacts/actions/workflows/publish.yaml/badge.svg)](https://github.com/canonical/mongodb-compass-artifacts/actions/workflows/publish.yaml)
 
-## Repository structure
+This repository contains the packaging metadata for creating a snap of MongoDB Compass. For more information on snaps, visit [snapcraft.io](https://snapcraft.io/).
 
-The main directory structure is:
+MongoDB Compass is a GUI tool that lets builders explore their data, run queries and aggregations, and refine their data models through and easy-to-use visual interface
 
-```text
-mongodb-compass-artifacts/
-├── LICENSE
-├── README.md
-└── compass/ # Snap for MongoDB Compass
-```
+## Installing the snap
 
-## Getting started
+The snap can be installed directly from the Snap Store.
 
-This repository contains packaging artifacts for MongoDB Compass in snap artifact
-To work on an artifact, clone the repository and change into the appropriate subdirectory.
-Each artifact includes its own `README.md` and `CONTRIBUTING.md` with build and usage instructions.
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/mongodb-compass)
 
-Snaps (example):
+or:
 
 ```bash
-git clone https://github.com/canonical/mongodb-compass-artifacts.git
-cd mongodb-compass-artifacts/<snap-name>
-snapcraft pack
+sudo snap install mongodb-compass --channel=1/edge
+sudo snap connect mongodb-compass:password-manager-service
+sudo snap connect mongodb-compass:system-observe
 ```
 
-## Project & Community
+You can run it with
 
-MongoDB artifacts is an open source project that warmly welcomes community contributions, suggestions, fixes, and constructive feedback.
+```bash
+mongodb-compass
+```
 
-* Check our [Code of Conduct](https://ubuntu.com/community/ethos/code-of-conduct)
-* Raise software issues or feature requests in [GitHub](https://github.com/canonical/mongodb--compass-artifacts/issues)
-* Report security issues through [LaunchPad](https://wiki.ubuntu.com/DebuggingSecurity#How%20to%20File)
-* Meet the community and chat with us on [Matrix](https://matrix.to/#/#charmhub-data-platform:ubuntu.com)
+Or use the icon in your system tray.
+
+## Advanced Usage
+
+MongoDB Compass is provided with a few default configurations:
+
+* networkTraffic: false
+* enableAtlasSignIn: false
+* enableGenAIFeatures: false
+* enableGenAISampleDocumentPassing: false
+* enableMaps: false
+
+The following ones are disabled and should not be enabled, they refer to upstream MongoDB Compass feedback panel, telemetry and automated updates.
+
+* enableFeedbackPanel: false
+* trackUsageStatistics: false
+* autoUpdates: false
+
+To update the default configuration (provided to all users of MongoDB Compass on this machine), update the file
+`/var/snap/mongodb-compass/current/etc/mongodb-compass.conf`.
 
 ## Contributing
 
-If you want to contribute, see the `CONTRIBUTING.md` file in the relevant snap subdirectory for clone, build, lint, and test instructions.
+Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on submitting issues and pull requests.
 
 ## License
 
-This repository is licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
+The MongoDB Compass Snap is free software, distributed under the Apache Software License,
+version 2.0. See [LICENSE](LICENSE) for more information.
+
+## Trademark Notice
+
+MongoDB is a trademark or registered trademark of MongoDB, Inc.
+Other trademarks are property of their respective owners.

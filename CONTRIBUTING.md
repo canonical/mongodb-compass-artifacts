@@ -12,7 +12,6 @@ sudo lxd init --auto
 
 ```bash
 git clone https://github.com/canonical/mongodb-compass-artifacts.git
-cd mongodb-compass-artifacts/compass
 ```
 
 ## Pack and install
@@ -40,10 +39,4 @@ Note that the this command assumes that the snap was already packed.
 
 ```
 sudo sysctl -w kernel.printk_ratelimit=0 ; journalctl --follow | grep mongodb-compass
-```
-
-## Check the snap logs
-
-```
-sudo snap logs mongodb-compass
 ```

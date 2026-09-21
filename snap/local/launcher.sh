@@ -13,7 +13,7 @@ if ! snapctl is-connected password-manager-service || ! snapctl is-connected sys
   echo "sudo snap connect mongodb-compass:password-manager-service"
   echo "sudo snap connect mongodb-compass:system-observe"
   zenity --title "MongoDB Compass: Connect to Password Manager Service and system-observe" --info --text "$connect_text" --width 600
-  exit
+  exit 1
 fi
 
 
@@ -23,8 +23,4 @@ if [ -n "$WAYLAND_DISPLAY" ] && [ -z "$DISABLE_WAYLAND" ]; then
   WAYLAND_OPTS="--enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer,UseOzonePlatform --ozone-platform-hint=auto"
 fi
 
-pushd "${SNAP}" > /dev/null
-
 exec "${SNAP}/usr/bin/mongodb-compass" --ignore-additional-command-line-flags --no-sandbox --disable-seccomp-filter-sandbox $WAYLAND_OPTS "$@"
-
-popd > /dev/null
