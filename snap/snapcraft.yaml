@@ -69,14 +69,12 @@ parts:
     build-packages:
       - cmake
       - libkrb5-dev
-      - libmongocrypt0
       - sed
       - unzip
     build-snaps:
       - node/24/stable
     build-environment:
       - HADRON_DISTRIBUTION: compass
-      - CSFLE_LIB_PATH: "packages/compass/src/deps/csfle/lib"
     stage-packages:
       - libsecret-1-0
       - libsecret-tools
@@ -91,14 +89,12 @@ parts:
       - libx11-6
       - libxcb1
       - libxcb-shm0
+      - libmongocrypt0
     override-build: |
       # Bypass CSFLE download, we will get it from the archive
       echo "process.exit(0)" > packages/compass/scripts/download-csfle.js
       # Bypass fonts downloads, we're using a free font instead of the licensed one.
       echo "process.exit(0)" > packages/compass/scripts/download-fonts.js
-
-      mkdir -p ${CSFLE_LIB_PATH}
-      cp /usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/libmongocrypt.so.0 ${CSFLE_LIB_PATH}/mongo_crypt_v1.so
 
       cp ${CRAFT_STAGE}/fonts/*.woff packages/compass/src/app/fonts/
       cp ${CRAFT_STAGE}/fonts/*.woff2 packages/compass/src/app/fonts/
