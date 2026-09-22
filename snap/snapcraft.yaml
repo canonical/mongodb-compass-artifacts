@@ -1,0 +1,146 @@
+name: mongodb-compass
+title: MongoDB Compass
+base: core24 # the base snap is the execution environment for this snap
+adopt-info: mongodb-compass
+summary: MongoDB Compass in a snap. # 79 char long summary
+description: |
+  MongoDB Compass lets builders explore their data, run queries and
+  aggregations, and refine their data models through an easy-to-use visual
+  interface.
+license: Apache-2.0
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict
+compression: lzo
+type: app
+platforms:
+  amd64:
+  arm64:
+website: https://github.com/canonical/mongodb-compass-artifacts
+contact: https://github.com/canonical/mongodb-compass-artifacts/issues/new
+issues: https://github.com/canonical/mongodb-compass-artifacts/issues/new
+source-code: https://github.com/canonical/mongodb-compass-artifacts/tree/1/edge/compass
+plugs:
+  shmem:
+    interface: shared-memory
+    private: true
+layout:
+  /etc/mongodb-compass.conf:
+    bind-file: $SNAP_COMMON/etc/mongodb-compass.conf
+
+apps:
+  mongodb-compass:
+    environment:
+      TMPDIR: $XDG_RUNTIME_DIR
+      GTK_USE_PORTAL: "1"
+    desktop: usr/share/applications/mongodb-compass.desktop
+    command: launcher.sh
+    extensions: [gnome]
+    plugs:
+      - browser-support
+      - desktop
+      - desktop-legacy
+      - network
+      - network-bind
+      - shmem
+      - system-observe
+      - wayland
+      - x11
+      - opengl
+      - password-manager-service
+      - home
+      - gsettings
+parts:
+  wrapper:
+    plugin: dump
+    source: snap/local
+    prime:
+      - launcher.sh
+      - etc/mongodb-compass.conf
+      - -fonts
+    organize:
+      mongodb-compass.conf: etc/mongodb-compass.conf
+  mongodb-compass:
+    after:
+      - wrapper
+    plugin: nil
+    source: https://git.launchpad.net/~data-platform/mongodb-compass/+git/compass
+    source-type: git
+    source-tag: v1.50.0
+    build-packages:
+      - cmake
+      - libkrb5-dev
+      - sed
+      - unzip
+    build-snaps:
+      - node/24/stable
+    build-environment:
+      - HADRON_DISTRIBUTION: compass
+    stage-packages:
+      - libsecret-1-0
+      - libsecret-tools
+      - gnome-keyring
+      - fonts-freefont-ttf
+      - util-linux
+      - openssl
+      - libbson-1.0-0t64
+      - libnspr4
+      - libnotify4
+      - libnss3
+      - libx11-6
+      - libxcb1
+      - libxcb-shm0
+      - libmongocrypt0
+    override-build: |
+      # Bypass CSFLE download, we will get it from the archive
+      echo "process.exit(0)" > packages/compass/scripts/download-csfle.js
+      # Bypass fonts downloads, we're using a free font instead of the licensed one.
+      echo "process.exit(0)" > packages/compass/scripts/download-fonts.js
+
+      cp ${CRAFT_STAGE}/fonts/*.woff packages/compass/src/app/fonts/
+      cp ${CRAFT_STAGE}/fonts/*.woff2 packages/compass/src/app/fonts/
+      cp ${CRAFT_STAGE}/fonts/fonts.less packages/compass/src/app/styles/fonts.less
+      
+      npm run bootstrap
+      npm run package-compass
+    
+      # Get version from tag
+      VERSION=$(git describe --tags --abbrev=10 | tr -d v) 
+
+      craftctl set version=${VERSION}
+
+      dpkg -x packages/compass/dist/mongodb-compass_${VERSION}_*.deb ${CRAFT_PART_INSTALL}
+      sed -i 's|Icon=mongodb-compass|Icon=/usr/share/pixmaps/mongodb-compass.png|' \
+        ${CRAFT_PART_INSTALL}/usr/share/applications/mongodb-compass.desktop
+
+      craftctl default
+    prime:
+      - usr/*
+      - -usr/lib/mongodb-compass/chrome-sandbox
+    override-prime: |
+      craftctl default
+      # Staged schemas ship uncompiled; GTK needs the compiled cache.
+      if [ -d usr/share/glib-2.0/schemas ]; then
+          glib-compile-schemas usr/share/glib-2.0/schemas || true
+      fi
+  patch-desktop-file-name:
+    after: [mongodb-compass]
+    source: https://github.com/snapcrafters/patch-desktop-file-name.git
+    source-subdir: electron
+    plugin: nil
+    override-build: |
+      pip install asarPy --break-system-packages
+      python3 $CRAFT_PART_SRC_WORK/patch-desktop-filename.py $CRAFT_STAGE/usr/lib/mongodb-compass/resources/app.asar
+  zenity:
+    plugin: nil
+    stage-packages:
+      - zenity
+      - libadwaita-1-0
+    prime:
+      - usr/bin/zenity
+      - usr/lib/*/libadwaita-1.so.0
+  licenses:
+    plugin: dump
+    source: .
+    source-type: local
+    stage:
+      - licenses/*
